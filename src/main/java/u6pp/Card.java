@@ -29,6 +29,70 @@ public class Card {
     public static String[] VALUES = {ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, 
         DRAW_2, REVERSE, SKIP, WILD, WILD_DRAW_4};
 
-    // start you code here
+    String color;
+    String value;
+
+    
+	// Constructor 
+	public Card(String c, String v) {
+		color = c;
+		value = v;
+	}
+    
+    public boolean trySetColor(String input) {
+
+        // inputhelper
+        boolean valid = false;
+        for(int i = 0; i < COLORS.length; i++) {
+            if (COLORS[i].equals(input)){
+                valid = true;
+            }
+        }
+        if (valid == false){
+            System.out.println("invalid input");
+            return false;
+        }
+
+        //changes wild to new color
+        if (color.equals(WILD)){
+            color = input;
+            System.out.println("color has been changed to " + input);
+            return true;
+        }
+
+        if (input.equals(WILD) || input == null){
+            System.out.println("invalid input");
+            return false;
+        }
+
+        else{
+            System.out.println("invalid input");
+            return false;
+        }
+
+    }
+
+    public boolean canPlayOn(Card input){
+        if (input == null){
+            return false;
+        }
+        if (color.equals(WILD)){
+            return true;
+        }
+        if (input.getColor().equals(color) || input.getValue().equals(value)){
+            return true;
+        }
+        return false;
+
+    }
+
+    public String getColor(){
+        return color;
+    }
+
+    public String getValue(){
+        return value;
+    }
+    
 
 }
