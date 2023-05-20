@@ -2,17 +2,25 @@ package u6pp;
 import java.util.ArrayList;
 
 public class Player {
-    
-    String name; 
 
-    public Player(String string) {
+    String myName;
 
-        Player p = new Player("kaiden");
+    ArrayList<Card> hand = new ArrayList<Card>();
 
+    public Player(String name){
+        myName = name;
     }
 
-    public void hand() {
-        ArrayList<Card> hand = new ArrayList<Card>();
+    public void setName(String name){
+        myName = name;
+    }
+
+    public String getName(){
+        return myName;
+    }
+    
+    public ArrayList<Card> getHand(){
+        return hand;
     }
 
 }

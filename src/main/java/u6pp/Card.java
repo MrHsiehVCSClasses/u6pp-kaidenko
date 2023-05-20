@@ -39,6 +39,8 @@ public class Card {
 		value = v;
 	}
     
+
+    //if previous, change 
     public boolean trySetColor(String input) {
 
         // inputhelper

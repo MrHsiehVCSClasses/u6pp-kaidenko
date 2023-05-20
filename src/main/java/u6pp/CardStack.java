@@ -1,91 +1,120 @@
 package u6pp;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class CardStack {
 
-    public static String RED = "RED";
-    public static String GREEN = "GREEN";
-    public static String BLUE = "BLUE";
-    public static String YELLOW = "YELLOW";
+    ArrayList<Card> deck = new ArrayList<Card>();
 
-    public static String ZERO = "0";
-    public static String ONE = "1";
-    public static String TWO = "2";
-    public static String THREE = "3";
-    public static String FOUR = "4";
-    public static String FIVE = "5";
-    public static String SIX = "6";
-    public static String SEVEN = "7";
-    public static String EIGHT = "8";
-    public static String NINE = "9";
+    public CardStack(){
 
-    public static String DRAW_2 = "DRAW_2";
-    public static String REVERSE = "REVERSE";
-    public static String SKIP = "SKIP";
-    public static String WILD = "WILD";
-    public static String WILD_DRAW_4 = "WILD_DRAW_4";
-
-    // Wild color is the default color for wilds, before they are played. 
-    public static String[] COLORS = {RED, GREEN, BLUE, YELLOW, WILD}; 
-    public static String[] VALUES = {ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, 
-        DRAW_2, REVERSE, SKIP, WILD, WILD_DRAW_4};
-
-
-    private Card[] deck = new Card[108];
-
-    private int cardsLeft;
-    private int draw;
-
-    public boolean isEmpty(){
-        if (deck[0] == null){
-            return true; 
-        }
-        else{
-            return false;
-        }
     }
 
-    public void Deck() {
-        cardsLeft = 108;
-        draw = 0;
-        int k = 0;
+    public void push(Card card){
+        deck.add(0, card);
+    }
 
-        for (int i = 0; i< COLORS.length; i++) {
-            for (int j = 0; j < VALUES.length; j++){
-                deck [k] =  new Card(COLORS[i], VALUES[j]);
-                k += 1;
-            }
+    public Card peek(){
+        if(this.isEmpty()){
+            return null;
+        } 
+        return(deck.get(0));
+    }
+
+    public boolean isEmpty(){
+        if(deck.size() == 0){
+            return true;
         }
-        System.out.println(deck.toString());
-         
+        return false;
     }
 
     public int getSize(){
-        return cardsLeft;
+        return deck.size();
     }
 
-    public Card deal() {
-        draw += 1;
-        cardsLeft -= 1;
+    public Card pop(){
 
-        return deck[draw - 1];
+        Card topCard = deck.get(0);
+        deck.remove(0);
+
+        return topCard;
+    }
+
+    public void clear(){
+
+        deck.clear();
 
     }
 
-    public void shuffle() {
-            
-        Random rand = new Random();
-            
-        for (int i = 0; i < 108; i++) {
-            int randomPosiiton = rand.nextInt(108);
-            Card temp = deck[randomPosiiton];
-            deck[randomPosiiton] = deck[i];
-            deck[i] = temp;
+    public void addAll(CardStack deck2){
+
+        ArrayList<Card> trash = new ArrayList<Card>();
+
+        if(deck.equals(deck2.deck)){
+            return;
         }
 
-        cardsLeft = 108;
-        draw = 0;
+        while(deck2.isEmpty() == false){
+            trash.add(0, deck2.deck.get(0));
+            deck2.deck.remove(0);
+        }
+
+        while(trash.isEmpty() == false){
+            deck.add(0, trash.get(0));
+            trash.remove(0);
+        }
 
     }
 
+    public void shuffle(){
+
+        Random random = new Random(); 
+
+        for (int i = 0; i < deck.size(); i++) {
+            int base = random.nextInt(i, deck.size());
+
+            if (base == i) {
+                continue;
+            }
+
+            Card check = deck.get(i);
+            deck.set(i, deck.get(base));
+            deck.set(base, check);
+        }
+    }
+
+    public static CardStack createUnoDeck() {
+
+        CardStack cardStack = new CardStack();
+
+        for (String color : Card.COLORS) {
+
+            if (color.equalsIgnoreCase(Card.WILD)) {
+                continue;
+            }
+    
+            for (String value : Card.VALUES) {
+
+                if (value.equals(Card.WILD) || value.equals(Card.WILD_DRAW_4)) {
+                    continue;
+                }
+
+                cardStack.push(new Card(color, value));
+
+                if (!value.equalsIgnoreCase(Card.ZERO)) {
+                    cardStack.push(new Card(color, value));
+                }
+
+            }
+        }
+    
+        for (int i = 0; i < 4; i++) {
+
+            cardStack.push(new Card(Card.WILD, Card.WILD));
+            cardStack.push(new Card(Card.WILD, Card.WILD_DRAW_4));
+
+        }
+    
+        return cardStack;
+    }
 }
